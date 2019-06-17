@@ -1,0 +1,45 @@
+<script type="text/javascript"><!--
+      var VARS = VARS || {};
+      VARS.test="aaa";
+      
+      window.onload = function(){
+        initialize();
+      }
+      
+      function initialize(){
+        console.log(VARS.test);
+      }
+      
+      function login(){
+        showLoading();
+        var loginUser = getElemValById("userId");
+        var loginPass = getElemValById("password");
+        google.script.run.withSuccessHandler(result).userAuth(loginUser,loginPass);
+        function result(canLogin){
+          if(canLogin)showRichAlert("認証成功");
+          else showRichAlert("認証失敗");
+          hideLoading();
+        }
+        //TODO:ハッシュ関数の利用
+      }
+      
+      //google.script.run.withSuccessHandler(loadState).sendToHtml_state();
+      function getElemValById(id)      {return document.getElementById(id).value;}  
+      
+      function showElemById(id,display){document.getElementById(id).style.display=display;} 
+      function hideElemById(id)        {document.getElementById(id).style.display="none";}  
+      
+      function showLoading(){document.getElementById("loader").style.display="flex";}
+      function hideLoading(){document.getElementById("loader").style.display="none";}
+      
+      function showRichAlert(str){    
+        hideRichAlert();
+        document.getElementById("richAlert").style.display="flex";
+        document.getElementById("richAlertText").innerHTML=str;
+        document.getElementById("richAlertClose").focus();
+      }
+      function hideRichAlert(){
+        document.getElementById("richAlert").style.display="none";
+      }
+      
+// --></script>
