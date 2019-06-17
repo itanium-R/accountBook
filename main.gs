@@ -14,5 +14,6 @@ function userAuth(id,pass){
 }
 
 function test01(){
-  Logger.log(userAuth("ita","qwe"));
+  //Logger.log(userAuth("ita","qwe"));
+  Logger.log(HtmlService.createHtmlOutputFromFile('index'));
 }

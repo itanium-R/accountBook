@@ -4,6 +4,7 @@
       
       window.onload = function(){
         initialize();
+        swichSec("loginSec");
       }
       
       function initialize(){
@@ -16,11 +17,23 @@
         var loginPass = getElemValById("password");
         google.script.run.withSuccessHandler(result).userAuth(loginUser,loginPass);
         function result(canLogin){
-          if(canLogin)showRichAlert("認証成功");
-          else showRichAlert("認証失敗");
+          if(canLogin){
+            showRichAlert("認証成功");
+            swichSec("mainSec");
+          }else{
+            showRichAlert("認証失敗");
+          }
           hideLoading();
         }
         //TODO:ハッシュ関数の利用
+      }
+      
+      function swichSec(id){
+        var sectionIds = ["loginSec","mainSec"];
+        for(let i=sectionIds.length-1;i>=0;i--){
+          hideElemById(sectionIds[i]);
+        }
+        showElemById(id,"block");
       }
       
       //google.script.run.withSuccessHandler(loadState).sendToHtml_state();
