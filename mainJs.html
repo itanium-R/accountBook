@@ -3,9 +3,10 @@
       var USERINFO = USERINFO || {};
       
       window.onload = function(){
+      
         try{
           // キャッシュ情報でログイン試行
-          if(document.cookie.split("userPass=")[1].split(";")[0]){
+          if(document.cookie.split("userToken=")[1].split(";")[0]){
             autoLogin();
           }else{
             initialize();
@@ -15,28 +16,45 @@
           initialize();
         }
       }
+      
       function autoLogin(){
-         loginId   = document.cookie.split("userId=")[1].split(";")[0];
-         loginPass = document.cookie.split("userPass=")[1].split(";")[0];
-         login(loginId,loginPass);
+         let id    = document.cookie.split("userId=")[1].split(";")[0];
+         let token = document.cookie.split("userToken=")[1].split(";")[0];
+
+         google.script.run.withSuccessHandler(loginOk)
+                         .withFailureHandler(gasFailure)
+                         .userAuthByToken(id,token);
+        function loginOk(canLogin){
+          if(canLogin){
+            //showRichAlert("認証成功");
+            USERINFO.id     = id;
+            USERINFO.token  = token;
+            switchSec("mainSec");
+          }else{
+            showRichAlert("認証失敗");
+            logout();
+          }
+          hideLoading();
+        }
       }
       
       function initialize(){
-        swichSec("loginSec");
+        hideLoading();
+        switchSec("loginSec");
         document.getElementById("userId").value = document.cookie.split("userId=")[1].split(";")[0];
       }
       
       function gasFailure(){
-        showRichAlert("実行に失敗しました．再実行してください．");
-        hideLoading();
+        showRichAlert("実行に失敗しました．時間をおいて再実行してください．");
+        initialize();
       }
       
-      // cookie参考：https://so-zou.jp/web-app/tech/programming/javascript/cookie/
-      
+      // cookie参考：https://so-zou.jp/web-app/tech/programming/javascript/cookie/ 
       function loginByForm(){
-        var loginId   = getElemValById("userId");
-        var loginPass = getElemValById("password");
-        login(loginId,loginPass);
+        let inputtedId   = getElemValById("userId");
+        let inputtedPass = getElemValById("password");
+        let hashedPass   = sha256(inputtedPass);
+        login(inputtedId,hashedPass);
       }
       
       
@@ -45,32 +63,31 @@
         var remember  = document.getElementById("rememberUser").checked;
         google.script.run.withSuccessHandler(loginOk)
                          .withFailureHandler(gasFailure)
-                         .userAuth(loginId,loginPass);
-        function loginOk(canLogin){
-          if(canLogin){
+                         .userAuthByPass(loginId,loginPass);
+        function loginOk(token){
+          if(token){
             //showRichAlert("認証成功");
             USERINFO.id     = loginId;
-            USERINFO.pass   = loginPass;
+            USERINFO.token  = token;
             if(remember){
-              document.cookie = "userId="   + encodeURIComponent(loginId)  +" ;max-age=2592000";
-              document.cookie = "userPass=" + encodeURIComponent(loginPass)+" ;max-age=2592000";
+              document.cookie = "userId="    + encodeURIComponent(loginId) + ";max-age=864000"; //有効期限10日間
+              document.cookie = "userToken=" + encodeURIComponent(token)   + ";max-age=864000";
             }
-            swichSec("mainSec");
+            switchSec("mainSec");
           }else{
             showRichAlert("認証失敗");
-            initialize();
+            logout();
           }
           hideLoading();
         }
-        //TODO:ハッシュ関数の利用
       }
       
       function logout(){
-        document.cookie = "userPass=;max-age=0";
+        document.cookie = "userToken=;max-age=0";
         initialize();
       }
       
-      function swichSec(id){
+      function switchSec(id){
         var sectionIds = ["loginSec","mainSec"];
         for(let i=sectionIds.length-1;i>=0;i--){
           hideElemById(sectionIds[i]);
