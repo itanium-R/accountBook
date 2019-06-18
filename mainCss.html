@@ -8,6 +8,13 @@
       section{
         display:none;
       }
+      .wideMargin{
+        margin:  1em 0 1em 0;
+      }
+      .miniFont{
+        font-size:0.6em;
+        font-weight:300;
+      }
       
       input{
         border-width: 0 0 1px 0;
@@ -21,6 +28,12 @@
       input:disabled{
         background-color:#EEE;
       }
+      
+      input[type="checkbox"]{
+        margin:0;
+        width:1em;
+      }
+      
       input[type="button"]{
         display    : inline-block;
         height     : 3.5rem;
@@ -43,11 +56,6 @@
         width: 5em; max-width:25vw;
       }
       input[type="text"]:focus{
-        outline: 1px #EEE double;
-        border-width:0 0 1px 0;
-        border-bottom-style:solid;
-        border-color: #000;
-        resize: none;
       }
       input[type="number"]{
       }

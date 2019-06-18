@@ -10,22 +10,24 @@
   <body>
     
     <section id="header">
-      <div>家計簿App</div>
+      <div>家計簿App</div><div onclick="logout()">logout</div>
     </section>
     
     <section id="loginSec">
       <form>
-      <label>ID</label>
-      <input type="text" id="userId" 
+      <label class="wideMargin">ID</label>
+      <input type="text" id="userId" class="wideMargin" 
         onKeyDown="if(event.keyCode==13){document.getElementById('password').focus();}" 
         onFocus="this.select(0,this.value.length)" onblur=""
         placeholder="" wrap="off" ><br>
-      <label>Pass</label>
-      <input type="password" id="password"
-        onKeyDown="if(event.keyCode==13){login();}" 
+      <label class="wideMargin">Pass</label>
+      <input type="password" id="password"  class="wideMargin"
+        onKeyDown="if(event.keyCode==13){loginByForm();}" 
         onFocus="this.select(0,this.value.length)" onblur=""
         placeholder="" wrap="off" ><br>
-      <input type="button" value="Send" onclick="login()">
+        <input type="checkbox" id="rememberUser" checked="true">
+        <font class="miniFont">ログイン情報を記憶する(cookie使用)</font><br>
+      <input type="button" value="Send" onclick="loginByForm()"  class="wideMargin">
       </form>
     </section>
     

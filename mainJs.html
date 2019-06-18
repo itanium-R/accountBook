@@ -1,31 +1,73 @@
 <script type="text/javascript"><!--
       var VARS = VARS || {};
-      VARS.test="aaa";
+      var USERINFO = USERINFO || {};
       
       window.onload = function(){
-        initialize();
-        swichSec("loginSec");
+        try{
+          // キャッシュ情報でログイン試行
+          if(document.cookie.split("userPass=")[1].split(";")[0]){
+            autoLogin();
+          }else{
+            initialize();
+          }
+        }catch(e){
+          console.log(e);
+          initialize();
+        }
+      }
+      function autoLogin(){
+         loginId   = document.cookie.split("userId=")[1].split(";")[0];
+         loginPass = document.cookie.split("userPass=")[1].split(";")[0];
+         login(loginId,loginPass);
       }
       
       function initialize(){
-        console.log(VARS.test);
+        swichSec("loginSec");
+        document.getElementById("userId").value = document.cookie.split("userId=")[1].split(";")[0];
       }
       
-      function login(){
-        showLoading();
-        var loginUser = getElemValById("userId");
+      function gasFailure(){
+        showRichAlert("実行に失敗しました．再実行してください．");
+        hideLoading();
+      }
+      
+      // cookie参考：https://so-zou.jp/web-app/tech/programming/javascript/cookie/
+      
+      function loginByForm(){
+        var loginId   = getElemValById("userId");
         var loginPass = getElemValById("password");
-        google.script.run.withSuccessHandler(result).userAuth(loginUser,loginPass);
-        function result(canLogin){
+        login(loginId,loginPass);
+      }
+      
+      
+      function login(loginId,loginPass){
+        showLoading();
+        var remember  = document.getElementById("rememberUser").checked;
+        google.script.run.withSuccessHandler(loginOk)
+                         .withFailureHandler(gasFailure)
+                         .userAuth(loginId,loginPass);
+        function loginOk(canLogin){
           if(canLogin){
-            showRichAlert("認証成功");
+            //showRichAlert("認証成功");
+            USERINFO.id     = loginId;
+            USERINFO.pass   = loginPass;
+            if(remember){
+              document.cookie = "userId="   + encodeURIComponent(loginId)  +" ;max-age=2592000";
+              document.cookie = "userPass=" + encodeURIComponent(loginPass)+" ;max-age=2592000";
+            }
             swichSec("mainSec");
           }else{
             showRichAlert("認証失敗");
+            initialize();
           }
           hideLoading();
         }
         //TODO:ハッシュ関数の利用
+      }
+      
+      function logout(){
+        document.cookie = "userPass=;max-age=0";
+        initialize();
       }
       
       function swichSec(id){
