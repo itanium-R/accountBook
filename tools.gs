@@ -5,6 +5,12 @@ function getToday(){
   return now;
 }
 
+function parseDate(date){
+  var now = new Date();
+  now = Utilities.formatDate(date,'JST','yyyy/MM/dd');
+  return now;
+}
+
 // @return yyyy/MM/dd HH:mm:ss形式で現在日付・時刻
 function getNow(){
   var now = new Date();

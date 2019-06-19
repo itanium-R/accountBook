@@ -36,3 +36,11 @@ function userAuthByPass(id,pass){
   usersSht.getRange("D1").setValue(""); //tokenリセット
   return false;
 }
+
+// @return token(length:32 consists:random[0-z])
+function getToken(){
+  return (Math.random().toString(36).slice(-8)+
+          Math.random().toString(36).slice(-8)+
+          Math.random().toString(36).slice(-8)+
+          Math.random().toString(36).slice(-8));
+}

@@ -10,7 +10,11 @@
   <body>
     
     <section id="header">
-      <div>家計簿App</div><div onclick="logout()">logout</div>
+      <div>家計簿App</div>
+      <div id="navi">
+      <div onclick="logout()" class="headButton">logout</div>
+      <div onclick="logout()" class="headButton">logout</div>
+      </div>
     </section>
     
     <section id="loginSec">
@@ -27,12 +31,16 @@
         placeholder="" wrap="off" ><br>
         <input type="checkbox" id="rememberUser" checked="true">
         <font class="miniFont">ログイン情報を記憶する(cookie使用)</font><br>
-      <input type="button" value="Send" onclick="loginByForm()"  class="wideMargin">
+      <input type="button" value="Login" onclick="loginByForm()"  class="wideMargin">
       </form>
     </section>
     
     <section id="mainSec">
-    MAIN(工事中)
+      <input type="button" value="記入" onclick="" class="menuButton">
+      <input type="button" value="表示" onclick="" class="menuButton">
+      <input type="button" value="設定" onclick="" class="menuButton">
+      <div id="expenseItemDiv"></div>
+      
     </section>
     
     <section id="loader">
