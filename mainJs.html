@@ -8,7 +8,6 @@
           // キャッシュ情報でログイン試行
           if(document.cookie.split("userToken=")[1].split(";")[0]){
             autoLogin();
-            loadExpenseItemSelect();
           }else{
             initialize();
           }
@@ -30,7 +29,7 @@
             //showRichAlert("認証成功");
             USERINFO.id     = id;
             USERINFO.token  = token;
-            switchSec("mainSec");
+            switchSec("topSec");
           }else{
             logout();
           }
@@ -40,6 +39,7 @@
       
       function initialize(){
         hideLoading();
+        hideElemById("navi");
         switchSec("loginSec");
         document.getElementById("userId").value = document.cookie.split("userId=")[1].split(";")[0];
       }
@@ -72,7 +72,7 @@
               document.cookie = "userId="    + encodeURIComponent(loginId) + ";max-age=864000"; //有効期限10日間
               document.cookie = "userToken=" + encodeURIComponent(token)   + ";max-age=864000";
             }
-            switchSec("mainSec");
+            switchSec("topSec");
           }else{
             showRichAlert("認証失敗");
             logout();
@@ -87,18 +87,37 @@
       }
       
       function switchSec(id){
-        var sectionIds = ["loginSec","mainSec"];
+        var sectionIds = ["loginSec","topSec"];
         for(let i=sectionIds.length-1;i>=0;i--){
           hideElemById(sectionIds[i]);
         }
         showElemById(id,"block");
+        initializeFuncCaller(id);
       }
       
       
+      function initializeFuncCaller(id){
+        if(id=="topSec")initializeTop();
+      }
+      
+      function initializeTop(){
+        loadTop();
+        showElemById("navi","block");
+      }
+      
+      function loadTop(){
+          google.script.run.withSuccessHandler(loadOk)
+                           .withFailureHandler(gasFailure)
+                           .loadTop(USERINFO.id,USERINFO.token);
+          function loadOk(topHtml){
+          document.getElementById("topSec").innerHTML=topHtml;
+        }
+      }
+      
       function loadExpenseItemSelect(){
-         google.script.run.withSuccessHandler(loadOk)
-                          .withFailureHandler(gasFailure)
-                          .loadExpenseItem();
+          google.script.run.withSuccessHandler(loadOk)
+                           .withFailureHandler(gasFailure)
+                           .loadExpenseItem(USERINFO.id,USERINFO.token);
         function loadOk(expenseItem){
           document.getElementById("expenseItemDiv").innerHTML=expenseItem;
         }

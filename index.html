@@ -11,10 +11,13 @@
     
     <section id="header">
       <div>家計簿App</div>
-      <div id="navi">
+      <div id="navi"><div class="headInner">
+      <div onclick="logout()" class="headButton">記入</div>
+      <div onclick="logout()" class="headButton">一覧</div>
+      </div><div class="headInner">
+      <div onclick="logout()" class="headButton">設定</div>
       <div onclick="logout()" class="headButton">logout</div>
-      <div onclick="logout()" class="headButton">logout</div>
-      </div>
+      </div></div>
     </section>
     
     <section id="loginSec">
@@ -35,14 +38,16 @@
       </form>
     </section>
     
-    <section id="mainSec">
-      <input type="button" value="記入" onclick="" class="menuButton">
-      <input type="button" value="表示" onclick="" class="menuButton">
-      <input type="button" value="設定" onclick="" class="menuButton">
-      <div id="expenseItemDiv"></div>
-      
+    <section id="topSec">
+      <br>loading...<br><hr>
+    </section>
+    <section id="topSec">
+      <br><font class='bigFont'>loading...</font><br><hr>
     </section>
     
+      <div id="expenseItemDiv"></div>
+      
+      
     <section id="loader">
     <div class="loaderInner">Loading...</div>
     </section>
