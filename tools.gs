@@ -1,17 +1,45 @@
-// @return yyyy/MM/dd形式で今日の日付
-function getToday(){
+// @return ￥SSS,SSS-
+function parseYenStr(num){
+  var numInt = parseInt(num,10);
+  if(isNaN(numInt))return "￥0-";
+  var numStr = (numInt+"");
+  var numStrLen = numStr.length;
+  var yenStr = numStr[numStrLen-1];
+  var commaPosition=numStrLen%3-1;
+  if(commaPosition<0)commaPosition+=3;
+  for(var i=(numStrLen-2);i>=0;i--){
+    if(i%3==commaPosition)yenStr = "," + yenStr;
+    yenStr = numStr[i] + yenStr;
+  }
+  return ("￥" +  yenStr + "-");
+}
+
+//------------------------------------------------------------
+// @return {DATE} year年month月の月はじめ
+function getDateOfFirstDayOfMonth(year,month){
+  var firstDate = new Date(year,month-1,1);
+  return firstDate;
+}
+
+// @return {DATE} year年month月の月末
+function getDateOfLastDayOfMonth(year,month){
+  var lastDate = new Date(year,month,0);
+  return lastDate;
+}
+
+// @return {str} yyyy/MM/dd形式で引数の日付
+function parseDateStr(date){
+  return Utilities.formatDate(date,'JST','yyyy/MM/dd');
+}
+
+// @return {str} yyyy/MM/dd形式で今日の日付
+function getTodayStr(){
   var now = new Date();
   now = Utilities.formatDate(now,'JST','yyyy/MM/dd');
   return now;
 }
 
-function parseDate(date){
-  var now = new Date();
-  now = Utilities.formatDate(date,'JST','yyyy/MM/dd');
-  return now;
-}
-
-// @return yyyy/MM/dd HH:mm:ss形式で現在日付・時刻
+// @return {str} yyyy/MM/dd HH:mm:ss形式で現在日付・時刻
 function getNow(){
   var now = new Date();
   now = Utilities.formatDate(now,'JST','yyyy/MM/dd HH:mm:ss');
