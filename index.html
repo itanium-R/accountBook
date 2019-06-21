@@ -10,12 +10,12 @@
   <body>
     
     <section id="header">
-      <div>家計簿App</div>
+      <div onclick="switchSec('topSec')">家計簿App</div>
       <div id="navi"><div class="headInner">
-      <div onclick="logout()" class="headButton">記入</div>
-      <div onclick="logout()" class="headButton">一覧</div>
+      <div onclick="switchSec('addRecordSec')" class="headButton">記入</div>
+      <div onclick="switchSec('viewRecordSec')" class="headButton">一覧</div>
       </div><div class="headInner">
-      <div onclick="logout()" class="headButton">設定</div>
+      <div onclick="switchSec('settingSec')" class="headButton">設定</div>
       <div onclick="logout()" class="headButton">logout</div>
       </div></div>
     </section>
@@ -32,20 +32,39 @@
         onKeyDown="if(event.keyCode==13){loginByForm();}" 
         onFocus="this.select(0,this.value.length)" onblur=""
         placeholder="" wrap="off" ><br>
-        <input type="checkbox" id="rememberUser" checked="true">
-        <font class="miniFont">ログイン情報を記憶する(cookie使用)</font><br>
+        <font class="miniFont"><input type="checkbox" id="rememberUser" checked="true">
+        ログイン情報を記憶する(cookie使用)</font><br>
       <input type="button" value="Login" onclick="loginByForm()"  class="wideMargin">
       </form>
     </section>
     
     <section id="topSec">
-      <br>loading...<br><hr>
+      <br><font class='bigFont'>loading...</font><hr>
     </section>
-    <section id="topSec">
-      <br><font class='bigFont'>loading...</font><br><hr>
+    <section id="addRecordSec">
+      <font class="bigFont">家計簿記入</font><hr>
+      <label>日付</label>
+      <input type="date" id="newRcdDate"><br>
+      <label>費目</label>
+      <span id="expenseItemDiv"></span><br>
+      <label>金額</label>
+      <input type="text" id="newRcdPayment" onblur="parseHankakuNum(this)"><br>
+      <label>概要</label>
+      <input type="text" id="newRcdOutline"><br>
+      <label>メモ</label>
+      <input type="text" id="newRcdMemo"><br>
+      <input type="button" value="記入" id="sendNewRcd">
     </section>
-    
-      <div id="expenseItemDiv"></div>
+    <section id="viewRecordSec">
+      <input type="button" class="monthShiftButton" value="前月" onclick="shiftMonthForView(-1)">
+      <span id="viewYear"  class="bigFont">2019</span>年
+      <span id="viewMonth" class="bigFont">6</span>月
+      <input type="button" class="monthShiftButton" value="次月" onclick="shiftMonthForView(1)">
+      <div id="monthRecord"></div>
+    </section>
+    <section id="settingSec">
+      <br>loading...<br><hr>set
+    </section>
       
       
     <section id="loader">

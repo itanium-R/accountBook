@@ -18,10 +18,10 @@
       }
       
       function autoLogin(){
-         let id    = document.cookie.split("userId=")[1].split(";")[0];
-         let token = document.cookie.split("userToken=")[1].split(";")[0];
+        let id    = document.cookie.split("userId=")[1].split(";")[0];
+        let token = document.cookie.split("userToken=")[1].split(";")[0];
 
-         google.script.run.withSuccessHandler(loginOk)
+        google.script.run.withSuccessHandler(loginOk)
                          .withFailureHandler(gasFailure)
                          .userAuthByToken(id,token);
         function loginOk(canLogin){
@@ -46,6 +46,11 @@
       
       function gasFailure(){
         showRichAlert("実行に失敗しました．時間をおいて再実行してください．");
+        initialize();
+      }
+      
+      function authFailure(){
+        showRichAlert("認証に失敗しました．再度ログインしてください．");
         initialize();
       }
       
@@ -87,7 +92,8 @@
       }
       
       function switchSec(id){
-        var sectionIds = ["loginSec","topSec"];
+        console.log("switch to " + id);
+        var sectionIds = ["loginSec","topSec","addRecordSec","viewRecordSec","settingSec"];
         for(let i=sectionIds.length-1;i>=0;i--){
           hideElemById(sectionIds[i]);
         }
@@ -97,41 +103,120 @@
       
       
       function initializeFuncCaller(id){
-        if(id=="topSec")initializeTop();
+        console.log("initializeFuncCaller:"+id);
+        if(id=="topSec"       )initializeTop();
+        if(id=="addRecordSec" )initializeAddRcd();
+        if(id=="viewRecordSec")initializeViewRcd();
+        if(id=="settingSec"   )initializeSetting();
       }
       
       function initializeTop(){
         loadTop();
         showElemById("navi","block");
       }
+      function initializeAddRcd(){
+        setTodayDate();
+        loadExpenseItemSelect();
+      }
+      function initializeViewRcd(){
+        setTodayDate();
+        loadMonthRecordTable();
+      }
+      function initializeSetting(){
+      }
       
       function loadTop(){
-          google.script.run.withSuccessHandler(loadOk)
-                           .withFailureHandler(gasFailure)
-                           .loadTop(USERINFO.id,USERINFO.token);
-          function loadOk(topHtml){
+        google.script.run.withSuccessHandler(loadOk)
+                         .withFailureHandler(gasFailure)
+                         .loadTop(USERINFO.id,USERINFO.token);
+        function loadOk(topHtml){
+          if(topHtml==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
           document.getElementById("topSec").innerHTML=topHtml;
         }
       }
       
       function loadExpenseItemSelect(){
-          google.script.run.withSuccessHandler(loadOk)
-                           .withFailureHandler(gasFailure)
-                           .loadExpenseItem(USERINFO.id,USERINFO.token);
+        showLoading();
+        google.script.run.withSuccessHandler(loadOk)
+                         .withFailureHandler(gasFailure)
+                         .loadExpenseItem(USERINFO.id,USERINFO.token);
         function loadOk(expenseItem){
+          if(expenseItem==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
           document.getElementById("expenseItemDiv").innerHTML=expenseItem;
+          hideLoading();
         }
       }
       
+      function loadMonthRecordTable(){
+        showLoading();
+        let viewYear  = getElemHTMById("viewYear");
+        let viewMonth = getElemHTMById("viewMonth");
+        google.script.run.withSuccessHandler(loadOk)
+                         .withFailureHandler(gasFailure)
+                         .loadMonthRecordTable(USERINFO.id,USERINFO.token,viewYear,viewMonth);
+        function loadOk(monthRecordTable){
+          if(monthRecordTable==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
+          document.getElementById("monthRecord").innerHTML=monthRecordTable;
+          hideLoading();
+        }
+      }     
       
+      function shiftMonthForView(offset){
+        let viewMonth  = getElemHTMById("viewMonth")-0;
+        let viewYear   = getElemHTMById("viewYear")-0;
+        viewMonth += offset;
+        if(viewMonth>12){
+          viewMonth -= 12;
+          viewYear  +=  1;
+        }else if(viewMonth<1){
+          viewMonth += 12;
+          viewYear  -=  1;
+        }
+        
+        document.getElementById("viewYear" ).innerHTML = viewYear;
+        document.getElementById("viewMonth").innerHTML = viewMonth;
+        
+        loadMonthRecordTable();
+      }
       
+      function setTodayDate(){
+        var now = new Date();
+        
+        var year = now.getFullYear();
+        var month= now.getMonth() +1;
+        var day  = now.getDate();
+        document.getElementById("viewYear"  ).innerHTML = year;
+        document.getElementById("viewMonth" ).innerHTML = month;
+        
+        let today = year + "-" + zeroPad2fig(month) + "-" + zeroPad2fig(day);
+        document.getElementById("newRcdDate").value = today;
+        
+      }
       
+      function zeroPad2fig(num) {
+        return ("00"+parseInt(num)).slice(-2);
+      }
       
-      
-      
-      
+      function parseHankakuNum(elem){
+        let hanNum = elem.value.replace(/[０-９]/g, (s) => {
+            return String.fromCharCode(s.charCodeAt(0) - 65248);
+        });
+        hanNum = hanNum.replace(/[^0-9]/g, (s) => {return "";});
+        elem.value=hanNum;
+      }
+        
       //google.script.run.withSuccessHandler(loadState).sendToHtml_state();
       function getElemValById(id)      {return document.getElementById(id).value;}  
+      function getElemHTMById(id)      {return document.getElementById(id).innerHTML;}  
       
       function showElemById(id,display){document.getElementById(id).style.display=display;} 
       function hideElemById(id)        {document.getElementById(id).style.display="none";}  

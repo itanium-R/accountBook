@@ -21,7 +21,7 @@ function loadTop(id,token){
     for(var i=0;i<thisMonthCnt;i++){
       if(thisMonthExpItemList[i][0] == "")break;
       outTopHtml += "<tr><td>" + thisMonthExpItemList[i][0] + "</td>"
-      +      "<td>" + parseYenStr(thisMonthExpItemList[i][1]) + "</td></tr>";
+                 +      "<td>" + parseYenStr(thisMonthExpItemList[i][1]) + "</td></tr>";
     }
     outTopHtml += "</table>";
   }
@@ -76,8 +76,7 @@ function loadMonthRecordTable(id,token,year,month){
     return noneRecode;
   }
     
-  return (year + "年" + month + "月" +
-          loadTable(allrecordList,startIndex,endIndex));
+  return (loadTable(allrecordList,startIndex,endIndex));
 }
 
 // @param  recordList 2次元配列のレコード //2次元配列は参照渡しされていることに注意
@@ -91,13 +90,14 @@ function loadTable(recordList,startIndex,endIndex){
   for(var i=startIndex;i<=endIndex;i++){
     var thisDay = parseDateStr(recordList[i][0]);
     if(day != thisDay){
-      outHtmlTable += "<tr><td colspan='4'>" + thisDay+"</td></tr>";
+      outHtmlTable += "<tr class='BG-EEE'><td colspan='4'>" + thisDay+"</td></tr>";
       day           = thisDay;
     }
-    outHtmlTable += "<tr><td>" + recordList[i][1] + "</td>";
-    outHtmlTable +=     "<td>" + recordList[i][2] + "</td>";
-    outHtmlTable +=     "<td>" + parseYenStr(recordList[i][3]) + "</td>";
-    outHtmlTable +=     "<td>";
+    outHtmlTable += "<tr class='BG-FFF'>";
+    outHtmlTable += "<td>" + recordList[i][1] + "</td>";
+    outHtmlTable += "<td>" + recordList[i][2] + "</td>";
+    outHtmlTable += "<td>" + parseYenStr(recordList[i][3]) + "</td>";
+    outHtmlTable += "<td>";
     if(recordList[i][4])outHtmlTable += "●";
     outHtmlTable += "</td></tr>";
   }

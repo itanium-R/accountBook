@@ -1,16 +1,10 @@
-// @return ￥SSS,SSS-
+// @param  {数値}??????
+// @return {str}￥???,???-
 function parseYenStr(num){
   var numInt = parseInt(num,10);
   if(isNaN(numInt))return "￥0-";
-  var numStr = (numInt+"");
-  var numStrLen = numStr.length;
-  var yenStr = numStr[numStrLen-1];
-  var commaPosition=numStrLen%3-1;
-  if(commaPosition<0)commaPosition+=3;
-  for(var i=(numStrLen-2);i>=0;i--){
-    if(i%3==commaPosition)yenStr = "," + yenStr;
-    yenStr = numStr[i] + yenStr;
-  }
+  var numStr = String(numInt);
+  var yenStr = numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return ("￥" +  yenStr + "-");
 }
 

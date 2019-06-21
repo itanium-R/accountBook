@@ -12,12 +12,13 @@
         margin:  1em 0 1em 0;
       }
       .miniFont{
-        font-size:0.6em;
+        font-size:0.8em;
         font-weight:300;
       }
       .bigFont{
         font-size:2em;
         font-weight:300;
+        line-height:2em;
       }
       #navi{
         display:none;
@@ -43,15 +44,30 @@
         border-radius:5px;
       }
       
-      
+      select{
+        border-width: 0 0 1px 0;
+        border-style:solid;
+        border-color: #666;
+        background:#FFF;
+        resize: none;
+        width: 13em;max-width: 65vw;
+        height:1.5em;
+        font-size: 1.2em;
+        text-align: left;
+        margin:  1em 0 1em 0;
+        padding: 0 0.5em 0.3em 0.5em;
+      }
       input{
         border-width: 0 0 1px 0;
         border-style:solid;
         border-color: #666;
         resize: none;
         width: 12em;max-width: 60vw;
+        height:1.5em;
         font-size: 1.2em;
-        text-align: center
+        text-align: left;
+        margin:  1em 0 1em 0;
+        padding: 0 0.5em 0 0.5em;
       }
       input:disabled{
         background-color:#EEE;
@@ -59,17 +75,19 @@
       
       input[type="checkbox"]{
         margin:0;
-        width:1em;
+        width:1.2em;
+        height:1.2em;
         display:inline-block;
       }
       
       input[type="button"]{
         display    : inline-block;
         height     : 3.5rem;
-        width      :  10em;  max-width   : 90vw;
-        padding    : 0.1rem; max-padding : 2vw;
-        margin     : 3px;   max-margin  : 2vw;
+        width      :  10em;  max-width   : 90%;
+        padding    : 0.1rem;
+        margin     : 3px; 
         font-weight: bold; font-size:2rem;
+        text-align : center;
         background : #EEE;
         color      : #000;
         border     : 0em solid #EEE;
@@ -80,6 +98,11 @@
       input[type="button"]:disabled{
         background : #999;
       }      
+      input[type="button"].monthShiftButton{
+        width:3em;
+        height:1.5em;
+        font-weight: bold; font-size:1em;
+      }
       label{
         display    : inline-block;
         width: 5em; max-width:25vw;
@@ -91,35 +114,30 @@
       input[type="date"]{
         display:inline-block;
         font-family: 'Noto Sans JP';
-        border:0;
         text-align: center;
-        font-weight: bold; font-size:1.2em;
-        width: 90%; max-width: 15em;
         font-family: 'Noto Sans JP';
         background-color: #FFF;
       }
 
       body{
         margin:0;padding:0;
-        font-weight: bold; font-size:1.2em;
         font-family: 'Noto Sans JP';
-        font-weight: 500;
       }
       div{
         margin:auto;
         width:24em;
-        max-width:99vw;
+        max-width:100%;
         text-align:center;
       }
       section{
         margin:0;
-        width:100vw;
+        width:100%;
         text-align:center;
       }
       hr{
         margin:auto;
         width:24em;
-        max-width:99vw;
+        max-width:95vw;
       }
       section#header{
         background-color:#EEE;
@@ -186,8 +204,8 @@
       table{
         border:0;
         margin:auto;
-        width:20em;
-        max-width:98vw;
+        min-width:20em;
+        max-width:95%;
       }
       table tr,table td{
         border-color:#000;
@@ -201,5 +219,7 @@
       table tr:nth-child(even) {background-color:#FFF;}
       table tr:nth-child( odd) {background-color:#EEE;}
       
+      table tr.BG-FFF{background-color:#FFF;}
+      table tr.BG-EEE{background-color:#EEE;}
       
     --></style>

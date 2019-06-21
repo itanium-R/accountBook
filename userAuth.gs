@@ -11,8 +11,8 @@ function userAuthByToken(id,token){
   if(token==usersSht.getRange("D1").getValue()){
     return true;
   }
-  // pass不一致
-  usersSht.getRange("D1").setValue(""); //tokenリセット
+  // token不一致
+  usersSht.getRange("D1").setValue(getToken()); //tokenリセット
   return false;
 }
 
@@ -26,14 +26,15 @@ function userAuthByPass(id,pass){
   var usersSht  = openShtByName(id);
   
   // TODO:passに塩振り＆ハッシュ化すべき
+  // TODO:tokenを平文で扱っているのを修正すべき
+  var token = getToken();
   // pass一致
   if(pass==usersSht.getRange("B1").getValue()){
-    var token = getToken();
     usersSht.getRange("D1").setValue(token);
     return token;
   }
   // pass不一致
-  usersSht.getRange("D1").setValue(""); //tokenリセット
+  usersSht.getRange("D1").setValue(token); //tokenリセット
   return false;
 }
 

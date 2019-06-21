@@ -14,3 +14,13 @@ function showSidebar() {
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   SpreadsheetApp.getUi().showSidebar(htmlOutput);
 }
+
+function onEdit(e){
+  sortRecordRange(e.source.getActiveSheet());
+}
+
+function sortRecordRange(sht){
+  var lastRow = sht.getLastRow();
+  sht.getRange(6,4,lastRow-5,5).sort(5);
+  sht.getRange(6,4,lastRow-5,5).sort({column:4, ascending:false});
+}
