@@ -21,15 +21,16 @@ function getDateOfLastDayOfMonth(year,month){
   return lastDate;
 }
 
-// @return {str} yyyy/MM/dd形式で引数の日付
+// @param  {DATE}
+// @return {str} yyyy-MM-dd形式で引数の日付
 function parseDateStr(date){
-  return Utilities.formatDate(date,'JST','yyyy/MM/dd');
+  return Utilities.formatDate(date,'JST','yyyy-MM-dd');
 }
 
-// @return {str} yyyy/MM/dd形式で今日の日付
+// @return {str} yyyy-MM-dd形式で今日の日付
 function getTodayStr(){
   var now = new Date();
-  now = Utilities.formatDate(now,'JST','yyyy/MM/dd');
+  now = Utilities.formatDate(now,'JST','yyyy-MM-dd');
   return now;
 }
 

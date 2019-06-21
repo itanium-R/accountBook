@@ -38,7 +38,7 @@ function loadExpenseItem(id,token){
   var outHtmlSelect="";
   var expenseItemList= sht.getRange(6,2,num,1).getValues();
   
-  outHtmlSelect ='<select id="expenseItem">';
+  outHtmlSelect ='<select id="newRcdExpItem">';
   for(var i=0;i<num;i++){
     outHtmlSelect += '<option value="'+expenseItemList[i][0] + '">'
                   +  expenseItemList[i][0] + '</option>';
@@ -90,7 +90,7 @@ function loadTable(recordList,startIndex,endIndex){
   for(var i=startIndex;i<=endIndex;i++){
     var thisDay = parseDateStr(recordList[i][0]);
     if(day != thisDay){
-      outHtmlTable += "<tr class='BG-EEE'><td colspan='4'>" + thisDay+"</td></tr>";
+      outHtmlTable += "<tr class='BG-EEE'><td colspan='4'><b>" + thisDay+"</b></td></tr>";
       day           = thisDay;
     }
     outHtmlTable += "<tr class='BG-FFF'>";
@@ -98,17 +98,37 @@ function loadTable(recordList,startIndex,endIndex){
     outHtmlTable += "<td>" + recordList[i][2] + "</td>";
     outHtmlTable += "<td>" + parseYenStr(recordList[i][3]) + "</td>";
     outHtmlTable += "<td>";
-    if(recordList[i][4])outHtmlTable += "●";
+    if(recordList[i][4])outHtmlTable += "ﾒﾓ";
     outHtmlTable += "</td></tr>";
   }
   outHtmlTable += "</table>";
   return outHtmlTable;
 }
+//---------------------------------------------
+function addNewRecord(id,token,date,expItem,description,payment,memo){
+  if(!userAuthByToken(id,token))return -1;
 
-
-
+  const sht        = openShtByName(id);
+  var record    = [[date,expItem,description,payment,memo]];
+  var recordCnt = sht.getRange("D4").getValue();
+  
+  sht.getRange(6+recordCnt,4,1,5).setValues(record);
+  sortRecordRange(sht);
+  return 0;
+}
 //---------------------------------------------
 
+function testADD(){
+  var id="ita";
+  const sht        = openShtByName(id);
+  var token=sht.getRange("D1").getValue();
+  var date="2019-06-21";
+  var expItem="日用品費";
+  var payment = 600;
+  var description="";
+  var memo="";
+  Logger.log(addNewRecord(id,token,date,expItem,description,payment,memo));
+}
 function testTOP(){
   var id="ita";
   const sht        = openShtByName(id);

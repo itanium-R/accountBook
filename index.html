@@ -11,14 +11,15 @@
     
     <section id="header">
       <div onclick="switchSec('topSec')">家計簿App</div>
-      <div id="navi"><div class="headInner">
+      <div id="navi"><div class="naviInner">
       <div onclick="switchSec('addRecordSec')" class="headButton">記入</div>
       <div onclick="switchSec('viewRecordSec')" class="headButton">一覧</div>
-      </div><div class="headInner">
+      </div><div class="naviInner">
       <div onclick="switchSec('settingSec')" class="headButton">設定</div>
       <div onclick="logout()" class="headButton">logout</div>
       </div></div>
     </section>
+    <div class="headSpace">　</div>
     
     <section id="loginSec">
       <form>
@@ -47,13 +48,13 @@
       <input type="date" id="newRcdDate"><br>
       <label>費目</label>
       <span id="expenseItemDiv"></span><br>
+      <label>概要</label>
+      <input type="text" id="newRcdDescription"><br>
       <label>金額</label>
       <input type="text" id="newRcdPayment" onblur="parseHankakuNum(this)"><br>
-      <label>概要</label>
-      <input type="text" id="newRcdOutline"><br>
       <label>メモ</label>
       <input type="text" id="newRcdMemo"><br>
-      <input type="button" value="記入" id="sendNewRcd">
+      <input type="button" value="記入" onclick="sendNewRecord()">
     </section>
     <section id="viewRecordSec">
       <input type="button" class="monthShiftButton" value="前月" onclick="shiftMonthForView(-1)">

@@ -78,7 +78,7 @@
               document.cookie = "userToken=" + encodeURIComponent(token)   + ";max-age=864000";
             }
             switchSec("topSec");
-          }else{
+          }else{ // 認証失敗
             showRichAlert("認証失敗");
             logout();
           }
@@ -101,7 +101,6 @@
         initializeFuncCaller(id);
       }
       
-      
       function initializeFuncCaller(id){
         console.log("initializeFuncCaller:"+id);
         if(id=="topSec"       )initializeTop();
@@ -117,6 +116,7 @@
       function initializeAddRcd(){
         setTodayDate();
         loadExpenseItemSelect();
+        resetNewRcdInputs();
       }
       function initializeViewRcd(){
         setTodayDate();
@@ -125,12 +125,18 @@
       function initializeSetting(){
       }
       
+      function resetNewRcdInputs(){
+        let newRcdIds = ["newRcdDescription"
+                          ,"newRcdPayment","newRcdMemo"];
+        for(var i=(newRcdIds.length-1);i>=0;i--)
+          resetElemValById(newRcdIds[i]);
+      }
       function loadTop(){
         google.script.run.withSuccessHandler(loadOk)
                          .withFailureHandler(gasFailure)
                          .loadTop(USERINFO.id,USERINFO.token);
         function loadOk(topHtml){
-          if(topHtml==-1){ //認証失敗
+          if(topHtml==-1){ // 認証失敗
             authFailure();
             return -1;
           }
@@ -144,7 +150,7 @@
                          .withFailureHandler(gasFailure)
                          .loadExpenseItem(USERINFO.id,USERINFO.token);
         function loadOk(expenseItem){
-          if(expenseItem==-1){ //認証失敗
+          if(expenseItem==-1){ // 認証失敗
             authFailure();
             return -1;
           }
@@ -152,6 +158,40 @@
           hideLoading();
         }
       }
+      
+      function sendNewRecord(){
+        let id          = USERINFO.id;
+        let token       = USERINFO.token;
+        let date        = getElemValById("newRcdDate");
+        let expItem     = getElemValById("newRcdExpItem");
+        let description = getElemValById("newRcdDescription");
+        let payment     = getElemValById("newRcdPayment");
+        let memo        = getElemValById("newRcdMemo");
+        if(!date){
+          showRichAlert("日付が未入力のため入力できません");
+          return -1;
+        }
+        if(payment==0){
+          showRichAlert("金額が未入力または0のため入力できません");
+          return -1;
+        }
+        showLoading();
+        google.script.run.withSuccessHandler(sendOk)
+                         .withFailureHandler(gasFailure)
+                         .addNewRecord(id,token,date,expItem,description,payment,memo);
+        function sendOk(result){
+          if(result==-1){ // 認証失敗
+            authFailure();
+            return -1;
+          }else if(result===0){ // 成功時
+            showRichAlert("記入成功！");
+            resetNewRcdInputs();
+          }else{
+            showRichAlert("記入失敗... もう一度実行してください");
+          }
+          hideLoading();
+        }
+      }     
       
       function loadMonthRecordTable(){
         showLoading();
@@ -215,6 +255,7 @@
       }
         
       //google.script.run.withSuccessHandler(loadState).sendToHtml_state();
+      function resetElemValById(id)    {return document.getElementById(id).value="";}  
       function getElemValById(id)      {return document.getElementById(id).value;}  
       function getElemHTMById(id)      {return document.getElementById(id).innerHTML;}  
       

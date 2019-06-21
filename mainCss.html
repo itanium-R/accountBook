@@ -4,6 +4,13 @@
       
       #header{
         display:block;
+        position:fixed;
+        top:0;right:0;left:0;
+        max-height:5em;
+        overflow:hidden;
+      }
+      .headSpace{
+        height:5em;
       }
       section{
         display:none;
@@ -18,21 +25,20 @@
       .bigFont{
         font-size:2em;
         font-weight:300;
-        line-height:2em;
       }
       #navi{
         display:none;
       }
-      .headInner{
+      .naviInner{
         display:inline-block;
-        width:9em;
+        width:9.0em;
         margin:auto;
       }
       .headButton{
         width:4em;
         display:inline-block;
         background:#F9F9F9;
-        margin:0.125em;
+        margin:0.1em;
         
         border-radius:5px;
       }
@@ -204,14 +210,13 @@
       table{
         border:0;
         margin:auto;
-        min-width:20em;
+        width:20em;
         max-width:95%;
       }
       table tr,table td{
         border-color:#000;
         border-style:solid;
         border-width:0;
-        font-size:0.90em;
       }
       table tr{
         height:2em;
