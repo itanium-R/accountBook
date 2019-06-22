@@ -12,7 +12,7 @@
     <section id="header">
       家計簿App
       <div onclick="logout()" class="headButton" id="logoutButton">logout</div>
-      <div id="navi"> <!--widrthが小さい端末では下に記述したボタンから順に非表示にする-->
+      <div id="navi"> <!--widrthが小さい端末では下に記述したボタンから順に非表示になる-->
         <div onclick="switchSec('addRecordSec')" class="headButton">記入</div>
         <div onclick="switchSec('viewRecordSec')" class="headButton">一覧</div>
         <div onclick="switchSec('settingSec')" class="headButton">設定</div>
@@ -79,19 +79,14 @@
     
     <section id="recordAlert"><div id="recordAlertInner">
       <div id="recordAlertText">
-      <label>日付</label>
-      <input type="date" id="rcdDate"><br>
-      <label>費目</label>
-      <span id="expItemDiv"></span><br>
-      <label>概要</label>
-      <input type="text" id="rcdDescription"><br>
-      <label>金額</label>
-      <input type="text" id="rcdPayment" onblur="parseHankakuNum(this)"><br>
-      <label>メモ</label>
-      <input type="text" id="rcdMemo"><br>
-      </div><!--
-      <input type="button" class="miniButton" value="削除"  onclick="hideRecordAlert()">
-      <input type="button" class="miniButton" value="書換"  onclick="hideRecordAlert()">-->
+      <label>日付</label><input type="date" id="rcdDate"><br>
+      <label>費目</label><span id="expItemDiv"></span><br>
+      <label>概要</label><input type="text" id="rcdDescription"><br>
+      <label>金額</label><input type="text" id="rcdPayment" onblur="parseHankakuNum(this)"><br>
+      <label>メモ</label><input type="text" id="rcdMemo"><br>
+      </div>
+      <input type="button" class="miniButton" value="削除"  onclick="deleteRecord()">
+      <input type="button" class="miniButton" value="書換"  onclick="rewriteRecord()">
       <input type="button" class="miniButton" value="閉じる" onclick="hideRecordAlert()">
     </div></section>
     

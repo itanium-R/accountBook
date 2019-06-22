@@ -18,7 +18,7 @@ function loadTop(id,token){
   if(thisMonthCnt){
     var thisMonthExpItemList = sht.getRange(6,10,thisMonthCnt,2).getValues();
     
-    outTopHtml +="費目別支出ランキング";
+    outTopHtml +="今月の費目別支出ランキング";
     outTopHtml +="<table>";
     for(var i=0;i<thisMonthCnt;i++){
       if(thisMonthExpItemList[i][0] == "")break;
@@ -104,7 +104,8 @@ function loadTable(recordList,startIndex,endIndex){
       outHtmlTable += "<tr class='BG-EEE'><td colspan='4'><b>" + thisDay + "</b></td></tr>";
       day           = thisDay;
     }
-    outHtmlTable += "<tr class='BG-FFF' onclick='loadAndShowRecord(" + i + ")'>";
+    var concat = '"' + buildRecordConcat(recordList[i]) + '"';
+    outHtmlTable += "<tr class='BG-FFF' onclick='loadAndShowRecord(" + i + "," + concat + ")'>";
     outHtmlTable += "<td>" + recordList[i][1] + "</td>";
     outHtmlTable += "<td>" + recordList[i][2] + "</td>";
     outHtmlTable += "<td>" + parseYenStr(recordList[i][3]) + "</td>";
@@ -129,8 +130,8 @@ function loadTable(recordList,startIndex,endIndex){
 // @return 成功->0　認証失敗->-1　不正な日付入力->-2
 function addNewRecord(id,token,date,expItem,description,payment,memo){
   if(!userAuthByToken(id,token))return -1;
-
-  if(date!=parseDateStr(date))return -2; // 不正な日付->-2を返す
+  if(date!=parseDateStr(date))  return -2; // 不正な日付->-2を返す
+  
   const sht     = openShtByName(id);
   var lastRow   = sht.getLastRow;
   var record    = [[date,expItem,description,payment,memo]];
@@ -139,6 +140,37 @@ function addNewRecord(id,token,date,expItem,description,payment,memo){
   // 書き込み
   if(recordCnt-lastRow<=5)sht.insertRowAfter(lastRow);//行追加
   sht.getRange(6+recordCnt,4,1,5).setValues(record);
+  sortRecordRange(sht);
+  return 0;
+}
+
+// レコード書換
+// @param  id             {str} user       id = shtName
+// @param  token          {str} usersToken 認証用
+// @param  index          {int} 当該レコードの行数
+// @param  concatForCheck {str} レコード内容を結合した文字列[レコード一致確認用]
+// --------以下書換更新後の値------
+// @param  date        {str} 日付を示す yyyy-MM-dd 形式の文字列
+// @param  expItem     {str} 費目
+// @param  description {str} 概要
+// @param  payment     {int} 金額
+// @param  memo        {str} メモ
+//------------------------------
+// @return 成功->0　認証失敗->-1 レコード不一致(失敗)->-3
+function rewriteRecord(id,token,index,concatForCheck,date,expItem,description,payment,memo){
+  if(!userAuthByToken(id,token))return -1;
+  if(date!=parseDateStr(date))  return -2; // 不正な日付->-2を返す
+
+  const sht      = openShtByName(id);
+  var record    = [[date,expItem,description,payment,memo]];
+  
+  // 消そうとしているレコードの内容の一致を確認　不一致エラー->-3を返す
+  var curRecord  = sht.getRange(6+index,4,1,5).getValues();
+  var curConcat  = buildRecordConcat(curRecord[0]);
+  if(concatForCheck!=curConcat)return -3;
+  
+  // レコード書換
+  sht.getRange(6+index,4,1,5).setValues(record);
   sortRecordRange(sht);
   return 0;
 }
@@ -154,10 +186,10 @@ function deleteRecord(id,token,index,concatForCheck){
 
   const sht      = openShtByName(id);
   var nullRecord = [["","","","",""]];
+  
+  // 消そうとしているレコードの内容の一致を確認　不一致エラー->-3を返す
   var curRecord  = sht.getRange(6+index,4,1,5).getValues();
   var curConcat  = buildRecordConcat(curRecord[0]);
-  
-  // 消そうとしているレコードの内容の一致を確認
   if(concatForCheck!=curConcat)return -3;
   
   // レコード削除

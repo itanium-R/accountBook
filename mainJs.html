@@ -1,4 +1,5 @@
 <script type="text/javascript"><!--
+//TODO : inputから",',<,>の入力を無効化
       var RCDINFO  = RCDINFO  || {};
       var USERINFO = USERINFO || {};
       
@@ -17,6 +18,8 @@
         }
       }
       
+      // --------------------------------------
+      // ログイン用
       function autoLogin(){
         let id    = document.cookie.split("userId=")[1].split(";")[0];
         let token = document.cookie.split("userToken=")[1].split(";")[0];
@@ -128,6 +131,8 @@
       function initializeSetting(){
       }
       
+      // --------------------------------------
+      // 家計簿記入用
       function resetNewRcdInputs(){
         let newRcdIds = ["newRcdDescription"
                           ,"newRcdPayment","newRcdMemo"];
@@ -173,11 +178,11 @@
         let payment     = getElemValById("newRcdPayment");
         let memo        = getElemValById("newRcdMemo");
         if(!date){
-          showRichAlert("日付が未入力のため入力できません");
+          showRichAlert("日付を入力してください");
           return -1;
         }
         if(payment==0){
-          showRichAlert("金額が未入力または0のため入力できません");
+          showRichAlert("金額を入力してください");
           return -1;
         }
         showLoading();
@@ -198,6 +203,8 @@
         }
       }     
       
+      // --------------------------------------
+      // 一覧機能用
       function loadMonthRecordTable(){
         showLoading();
         let viewYear  = getElemHTMById("viewYear");
@@ -215,6 +222,84 @@
         }
       }     
       
+      // レコード読込　recordAlertで表示
+      function loadAndShowRecord(index,concat){
+        RCDINFO.index  = index;
+        RCDINFO.concat = concat;
+        console.log(index,concat);
+        showLoading();
+        google.script.run.withSuccessHandler(loadOk)
+                         .withFailureHandler(gasFailure)
+                         .loadRecord(USERINFO.id,USERINFO.token,index);
+        function loadOk(record){
+          if(record==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
+          showRecordAlert(record[0],record[1],record[2],record[3],record[4]);
+          hideLoading();
+        }
+      }
+      
+      // レコード更新
+      // rcdAlertが表示中でRCDINFOが書き込まれている状態で実行
+      function rewriteRecord(){
+        let index  = RCDINFO.index;
+        let concat = RCDINFO.concat;
+        let date        = getElemValById("rcdDate");
+        let expItem     = getElemValById("rcdExpItem");
+        let description = getElemValById("rcdDescription");
+        let payment     = getElemValById("rcdPayment");
+        let memo        = getElemValById("rcdMemo");
+        console.log(index,concat);
+        hideRecordAlert();
+        showLoading();
+        google.script.run.withSuccessHandler(deleteOk)
+                         .withFailureHandler(gasFailure)
+                         .rewriteRecord(USERINFO.id,USERINFO.token,index,concat,
+                                        date,expItem,description,payment,memo);
+        function deleteOk(result){
+          if(result==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
+          if(result==0){ // 成功時
+            //showRichAlert("更新成功！");
+          }else{
+            showRichAlert("更新失敗...　もう一度実行してください．");
+          }
+          hideLoading();
+          loadMonthRecordTable();
+        }
+      }
+      
+      // レコード削除
+      // rcdAlertが表示中でRCDINFOが書き込まれている状態で実行
+      function deleteRecord(){
+        let index  = RCDINFO.index;
+        let concat = RCDINFO.concat;
+        console.log(index,concat);
+        hideRecordAlert();
+        showLoading();
+        google.script.run.withSuccessHandler(deleteOk)
+                         .withFailureHandler(gasFailure)
+                         .deleteRecord(USERINFO.id,USERINFO.token,index,concat);
+        function deleteOk(result){
+          if(result==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
+          if(result==0){ // 成功時
+            //showRichAlert("削除成功！");
+          }else{
+            showRichAlert("削除失敗...　もう一度実行してください．");
+          }
+          hideLoading();
+          loadMonthRecordTable();
+        }
+      }
+      
+      // 一覧（月間表示）の月を選択するボタンの処理
       function shiftMonthForView(offset){
         let viewMonth  = getElemHTMById("viewMonth")-0;
         let viewYear   = getElemHTMById("viewYear")-0;
@@ -233,6 +318,9 @@
         loadMonthRecordTable();
       }
       
+      // --------------------------------------
+      // JS　utilities  
+            
       function setTodayDate(){
         var now = new Date();
         
@@ -258,8 +346,7 @@
         hanNum = hanNum.replace(/[^0-9]/g, (s) => {return "";});
         elem.value=hanNum;
       }
-        
-      //google.script.run.withSuccessHandler(loadState).sendToHtml_state();
+      
       function resetElemValById(id)    {return document.getElementById(id).value="";}  
       function getElemValById(id)      {return document.getElementById(id).value;}  
       function getElemHTMById(id)      {return document.getElementById(id).innerHTML;}  
@@ -292,20 +379,9 @@
       }
       function hideRecordAlert(){
         document.getElementById("recordAlert").style.display="none";
+        RCDINFO.index  = "";
+        RCDINFO.concat = "";
       }
       
-      function loadAndShowRecord(index){
-        google.script.run.withSuccessHandler(loadOk)
-                         .withFailureHandler(gasFailure)
-                         .loadRecord(USERINFO.id,USERINFO.token,index);
-        function loadOk(record){
-          if(record==-1){ //認証失敗
-            authFailure();
-            return -1;
-          }
-          showRecordAlert(record[0],record[1],record[2],record[3],record[4]);
-          hideLoading();
-        }
-      }
       
 // --></script>
