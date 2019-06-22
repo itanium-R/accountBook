@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= HtmlService.createHtmlOutputFromFile('mainCss').getContent(); ?>
+    <?!= HtmlService.createHtmlOutputFromFile('mainJs').getContent(); ?>
+    <?!= HtmlService.createHtmlOutputFromFile('js-sha256').getContent(); ?>
+
+    <script type="text/javascript"><!--
+    
+      window.onload = function(){
+        showElemById("signup","block");
+        buildLinkInThisApp("linkToTop","index","戻る");
+    
+      }
+      
+      function buildURLInThisApp(page){
+        google.script.run.withSuccessHandler(buildOk)
+                         .withFailureHandler(gasFailure)
+                         .buildURLInThisApp(page);
+        function buildOk(result){
+          return result;
+        }
+      }
+      
+      function signup(){
+        let id    = getElemValById("userId");
+        let pass  = getElemValById("password");
+        let pass2 = getElemValById("password2");
+        if(pass!=pass2){
+          alert("passwordが一致しません");
+          return -1;
+        }
+        pass = sha256(pass);
+        
+        showLoading();
+        google.script.run.withSuccessHandler(signupOk)
+                         .withFailureHandler(gasFailure)
+                         .createUsersShtFromTmpl(id,pass);
+        function signupOk(result){
+          if(result===0){
+            hideElemById("signup");
+            showElemById("done","block");
+          }else if(result==-10){
+            alert("そのIDは利用できません．");
+          }else{
+            alert("アカウント登録失敗");
+          }
+          hideLoading();
+        }
+        
+      }
+      
+
+      
+    --></script>
+  </head>
+  <body>
+    <section id="signup">
+      <form>
+      <label class="wideMargin">ID</label>
+      <input type="text" id="userId" class="wideMargin" 
+        onKeyDown="if(event.keyCode==13){document.getElementById('password').focus();}" 
+        onFocus="this.select(0,this.value.length)" onblur=""
+        placeholder="" wrap="off" ><br>
+      <label class="wideMargin">Pass</label>
+      <input type="password" id="password"  class="wideMargin"
+        onKeyDown="if(event.keyCode==13){document.getElementById('password2').focus();}" 
+        onFocus="this.select(0,this.value.length)" onblur=""
+        placeholder="" wrap="off" ><br>
+      <label class="wideMargin">Pass</label>
+      <input type="password" id="password2"  class="wideMargin"
+        onKeyDown="if(event.keyCode==13){signup();}" 
+        onFocus="this.select(0,this.value.length)" onblur=""
+        placeholder="" wrap="off" ><br>
+      <input type="button" value="Signup" onclick="signup()"  class="wideMargin">
+      </form>
+    </section>
+    <section id="done">
+      アカウント登録成功！元のページに戻ってログインしてください．
+    </section>  
+      
+    <div id="linkToTop"></div>
+    
+    
+    <section id="loader">
+    <div class="loaderInner">Loading...</div>
+    </section>
+  
+  </body>
+</html>
+
+

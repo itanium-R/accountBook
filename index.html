@@ -5,6 +5,22 @@
     <?!= HtmlService.createHtmlOutputFromFile('mainCss').getContent(); ?>
     <?!= HtmlService.createHtmlOutputFromFile('mainJs').getContent(); ?>
     <?!= HtmlService.createHtmlOutputFromFile('js-sha256').getContent(); ?>
+    
+    <script type="text/javascript"><!--
+      window.onload = function(){
+        try{
+          // キャッシュ情報でログイン試行
+          if(document.cookie.split("userToken=")[1].split(";")[0]){
+            autoLogin();
+          }else{
+            initialize();
+          }
+        }catch(e){
+          console.log(e);
+          initialize();
+        }
+      }
+    --></script>
   </head>
   
   <body>
@@ -37,6 +53,7 @@
         ログイン情報を記憶する(cookie使用)</font><br>
       <input type="button" value="Login" onclick="loginByForm()"  class="wideMargin">
       </form>
+      <div id="linkToSignup"></div>
     </section>
     
     <section id="topSec">
@@ -85,7 +102,7 @@
       <label>金額</label><input type="text" id="rcdPayment" onblur="parseHankakuNum(this)"><br>
       <label>メモ</label><input type="text" id="rcdMemo"><br>
       </div>
-      <input type="button" class="miniButton" value="削除"  onclick="deleteRecord()">
+      <input type="button" class="dangerButton miniButton" value="削除" onclick="deleteRecord()">
       <input type="button" class="miniButton" value="書換"  onclick="rewriteRecord()">
       <input type="button" class="miniButton" value="閉じる" onclick="hideRecordAlert()">
     </div></section>

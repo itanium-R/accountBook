@@ -72,14 +72,20 @@ function isShtExist(shtName){
   return false;
 }
 
-function createUsersShtFromTmpl(tmplName,userName){
+// @param  userName {str} ユーザ名=シート名
+// @return 成功:0 入力漏れ:-10 使用できないシート名:-11
+function createUsersShtFromTmpl(userName,pass){
+  if((!userName)||(!pass))return -10;
+  if(isShtExist(userName))return -11;
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const tmplSht  = nameOpen(tmplName);
+  const tmplSht  = openShtByName("tmpl");
   const usersSht = tmplSht.copyTo(ss);
   usersSht.setName(userName);
-  return usersSht;
+  usersSht.getRange("B1").setValue(pass);
+  usersSht.getRange("D1").setValue(getToken());
+  return 0;
 }
 
 function test10(){
-  Logger.log();
+  Logger.log(createUsersShtFromTmpl("abc","pass"));
 }

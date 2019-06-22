@@ -29,12 +29,11 @@
       #navi{
         display:none;
       }
-      .naviInner{
-        display:inline-block;
-        width:9.0em;
-        margin:auto;
+      a,a:visited{
+        color : #333;
+        text-decoration: none;
       }
-      .headButton,miniButton{
+      .headButton{
         width:4em;
         height:1.5em;
         display:inline-block;
@@ -106,10 +105,14 @@
         background : #999;
       }      
       input[type="button"].monthShiftButton,input[type="button"].miniButton{
-        width  : 3em;
+        width  : 4em;
         height : 1.5em;
         display: inline-block;
         font-weight: bold; font-size:1em;
+      }
+      input[type="button"].dangerButton{
+        background : #F40;
+        color      : #FFF;
       }
       label{
         display    : inline-block;

@@ -3,20 +3,7 @@
       var RCDINFO  = RCDINFO  || {};
       var USERINFO = USERINFO || {};
       
-      window.onload = function(){
       
-        try{
-          // キャッシュ情報でログイン試行
-          if(document.cookie.split("userToken=")[1].split(";")[0]){
-            autoLogin();
-          }else{
-            initialize();
-          }
-        }catch(e){
-          console.log(e);
-          initialize();
-        }
-      }
       
       // --------------------------------------
       // ログイン用
@@ -46,6 +33,8 @@
         hideElemById("logoutButton");
         switchSec("loginSec");
         document.getElementById("userId").value = document.cookie.split("userId=")[1].split(";")[0];
+        
+        buildLinkInThisApp("linkToSignup","signup","アカウント登録はこちらから");
       }
       
       function gasFailure(){
@@ -381,6 +370,17 @@
         document.getElementById("recordAlert").style.display="none";
         RCDINFO.index  = "";
         RCDINFO.concat = "";
+      }
+      
+      // 要素writeElemIdにpage飛ぶリンクを書き込む
+      function buildLinkInThisApp(writeElemId,page,message){
+        google.script.run.withSuccessHandler(buildOk)
+                         .withFailureHandler(gasFailure)
+                         .buildURLInThisApp(page);
+        function buildOk(result){
+          document.getElementById(writeElemId).innerHTML = 
+          ("<a href=" + result + ">" + message + "</a>");
+        }
       }
       
       

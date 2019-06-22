@@ -63,8 +63,9 @@ function loadMonthRecordTable(id,token,year,month){
   
   const sht        = openShtByName(id);
   const noneRecode = year + "年" + month + "月" +"<hr>この月のデータはありません"
-  var recordListCnt   = sht.getRange("D4").getValue();
-  var allrecordList   = sht.getRange(6,4,recordListCnt,5).getValues();
+  var recordListCnt= sht.getRange("D4").getValue();
+  if(recordListCnt <= 0)return noneRecode;
+  var allrecordList= sht.getRange(6,4,recordListCnt,5).getValues();
   var firstDate    = getDateOfFirstDayOfMonth(year,month);
   var lastDate     = getDateOfLastDayOfMonth(year,month);
   var startIndex,endIndex;
@@ -270,7 +271,7 @@ function testLEI(){
   Logger.log(loadExpenseItem(id,token));
 }
 function testMR(){
-  var id="ita";
+  var id="test";
   const sht = openShtByName(id);
   var token = sht.getRange("D1").getValue();
   Logger.log(loadMonthRecordTable(id,token,2019,6));

@@ -3,6 +3,7 @@
 // @param token {str} token
 // @return     認証成功:true　失敗:false
 function userAuthByToken(id,token){
+  if(id=="tmpl")return false; // tmplははじく
   // 存在するユーザか＝ユーザ用シートがあるか確認
   if(!isShtExist(id))return false;
   var usersSht  = openShtByName(id);
@@ -21,6 +22,7 @@ function userAuthByToken(id,token){
 // @param pass {str} password 
 // @return     認証成功:token(length:32)　失敗:false
 function userAuthByPass(id,pass){
+  if(id=="tmpl")return false; // tmplははじく
   // 存在するユーザか＝ユーザ用シートがあるか確認
   if(!isShtExist(id))return false;
   var usersSht  = openShtByName(id);
