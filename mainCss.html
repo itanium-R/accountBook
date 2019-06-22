@@ -6,11 +6,11 @@
         display:block;
         position:fixed;
         top:0;right:0;left:0;
-        max-height:5em;
+        max-height:3.5em;
         overflow:hidden;
       }
       .headSpace{
-        height:5em;
+        height:3.5em;
       }
       section{
         display:none;
@@ -34,8 +34,9 @@
         width:9.0em;
         margin:auto;
       }
-      .headButton{
+      .headButton,miniButton{
         width:4em;
+        height:1.5em;
         display:inline-block;
         background:#F9F9F9;
         margin:0.1em;
@@ -104,9 +105,10 @@
       input[type="button"]:disabled{
         background : #999;
       }      
-      input[type="button"].monthShiftButton{
-        width:3em;
-        height:1.5em;
+      input[type="button"].monthShiftButton,input[type="button"].miniButton{
+        width  : 3em;
+        height : 1.5em;
+        display: inline-block;
         font-weight: bold; font-size:1em;
       }
       label{
@@ -152,7 +154,7 @@
        /* -------------------------------------------------- */
       
       
-      #richAlert{
+      #richAlert,#recordAlert{
         position:fixed;
         display: none;
         top:0; bottom:0; right:0; left:0;
@@ -161,15 +163,11 @@
         height:100vh;
         text-align: center;
         align-items: center;
-      }      
-            
-      
-      #richAlert{
         z-index: 9;
       }
-      #richAlertInner{
+      #richAlertInner,#recordAlertInner{
         width :18.0em;       max-width: 95vw;
-                             max-height:80vh;
+                             max-height:90vh;
         border: 0em none #FFF;
         background-color: #FFF;
         justify-content: center;
@@ -178,10 +176,10 @@
         font-size:1em;
         border-radius: 0.3em;
       }
-      #richAlertText{
+      #richAlertText,#recordAlertText{
         margin-top:0.5em;
         width :17.0em;       max-width :90vw;
-        min-height:6.0em;   max-height:50vh;
+        min-height:6.0em;   max-height:80vh;
         margin:0.5em 0.5em 0 0.5em ;
         margin-buttom:0.5em;
         overflow-y:scroll;
@@ -210,16 +208,22 @@
       table{
         border:0;
         margin:auto;
-        width:20em;
-        max-width:95%;
+        width:24em;
+        max-width:94vw;
       }
       table tr,table td{
         border-color:#000;
-        border-style:solid;
+        border-style:none;
         border-width:0;
       }
       table tr{
         height:2em;
+      }
+      table tr.BG-FFF:hover{
+        background-color:#DDD;
+      }
+      table tr.BG-FFF:active{
+        background-color:#DDD;
       }
       table tr:nth-child(even) {background-color:#FFF;}
       table tr:nth-child( odd) {background-color:#EEE;}

@@ -24,6 +24,7 @@ function getDateOfLastDayOfMonth(year,month){
 // @param  {DATE}
 // @return {str} yyyy-MM-dd形式で引数の日付
 function parseDateStr(date){
+  date = new Date(date);
   return Utilities.formatDate(date,'JST','yyyy-MM-dd');
 }
 

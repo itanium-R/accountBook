@@ -1,5 +1,5 @@
 <script type="text/javascript"><!--
-      var VARS = VARS || {};
+      var RCDINFO  = RCDINFO  || {};
       var USERINFO = USERINFO || {};
       
       window.onload = function(){
@@ -40,6 +40,7 @@
       function initialize(){
         hideLoading();
         hideElemById("navi");
+        hideElemById("logoutButton");
         switchSec("loginSec");
         document.getElementById("userId").value = document.cookie.split("userId=")[1].split(";")[0];
       }
@@ -112,15 +113,17 @@
       function initializeTop(){
         loadTop();
         showElemById("navi","block");
+        showElemById("logoutButton","inline-block");
       }
       function initializeAddRcd(){
         setTodayDate();
-        loadExpenseItemSelect();
+        loadExpItemSelect("newExpItemDiv","newRcdExpItem");
         resetNewRcdInputs();
       }
       function initializeViewRcd(){
         setTodayDate();
         loadMonthRecordTable();
+        loadExpItemSelect("expItemDiv","rcdExpItem");
       }
       function initializeSetting(){
       }
@@ -144,17 +147,19 @@
         }
       }
       
-      function loadExpenseItemSelect(){
+      // @param  writeElemId  {str} 取得したsetectを書き込む要素のid
+      // @param  selectElemId {str} 取得したsetect要素のid
+      function loadExpItemSelect(writeElemId,selectElemId){
         showLoading();
         google.script.run.withSuccessHandler(loadOk)
                          .withFailureHandler(gasFailure)
-                         .loadExpenseItem(USERINFO.id,USERINFO.token);
+                         .loadExpenseItem(USERINFO.id,USERINFO.token,selectElemId);
         function loadOk(expenseItem){
           if(expenseItem==-1){ // 認証失敗
             authFailure();
             return -1;
           }
-          document.getElementById("expenseItemDiv").innerHTML=expenseItem;
+          document.getElementById(writeElemId).innerHTML=expenseItem;
           hideLoading();
         }
       }
@@ -273,6 +278,34 @@
       }
       function hideRichAlert(){
         document.getElementById("richAlert").style.display="none";
+      }
+      function showRecordAlert(date,expItem,description,payment,memo){
+        console.log("recordAlert:"+date,expItem,description,payment,memo)
+        hideRichAlert();
+        document.getElementById("recordAlert").style.display="flex";
+        document.getElementById("rcdDate").value=date;
+        document.getElementById("rcdExpItem").value=expItem;
+        document.getElementById("rcdDescription").value=description;
+        document.getElementById("rcdPayment").value=payment;
+        document.getElementById("rcdMemo").value=memo;
+        //document.getElementById("recordAlertClose").focus();
+      }
+      function hideRecordAlert(){
+        document.getElementById("recordAlert").style.display="none";
+      }
+      
+      function loadAndShowRecord(index){
+        google.script.run.withSuccessHandler(loadOk)
+                         .withFailureHandler(gasFailure)
+                         .loadRecord(USERINFO.id,USERINFO.token,index);
+        function loadOk(record){
+          if(record==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
+          showRecordAlert(record[0],record[1],record[2],record[3],record[4]);
+          hideLoading();
+        }
       }
       
 // --></script>
