@@ -139,7 +139,7 @@ function addNewRecord(id,token,date,expItem,description,payment,memo){
   var recordCnt = sht.getRange("D4").getValue();
   
   // 書き込み
-  if(recordCnt-lastRow<=5)sht.insertRowAfter(lastRow);//行追加
+  if(lastRow-recordCnt<=5)sht.insertRowAfter(lastRow);//行追加
   sht.getRange(6+recordCnt,4,1,5).setValues(record);
   sortRecordRange(sht);
   return 0;
@@ -207,7 +207,7 @@ function buildRecordConcat(record){
            record[2] +  record[3]  + record[4] );
 }
 
-
+//-----------------------------------------------
 // @param  id             {str} user       id = shtName
 // @param  token          {str} usersToken 認証用
 // @param  index          {int} 当該レコードの行数
@@ -225,7 +225,64 @@ function loadRecord(id,token,index){
 }
 
 //---------------------------------------------
+// 新しい費目追加（設定）
+// @param  id          {str} user       id = shtName
+// @param  token       {str} usersToken 認証用
+// @param  expItem     {str} 費目
+// @return 成功->0　認証失敗->-1　
+function addExpItem(id,token,expItem){
+  if(!userAuthByToken(id,token))return -1;
+  
+  const sht      = openShtByName(id);
+  var lastRow    = sht.getLastRow;
+  var expItemCnt = sht.getRange("B4").getValue();
+  
+  // 書き込み
+  if(lastRow-expItemCnt<=5)sht.insertRowAfter(lastRow);//行追加
+  sht.getRange(6+expItemCnt,2).setValue(expItem);
+  return 0;
+}
 
+// 費目削除（設定）
+// @param  id          {str} user       id = shtName
+// @param  token       {str} usersToken 認証用
+// @param  expItem     {str} 費目
+// @return 成功->0　認証失敗->-1　存在しない費目->-5
+function delExpItem(id,token,expItem){
+  if(!userAuthByToken(id,token))return -1;
+  
+  const sht      = openShtByName(id);
+  var lastRow    = sht.getLastRow;
+  var expItemCnt = sht.getRange("B4").getValue();
+  var expItemList= sht.getRange(6,2,expItemCnt,1).getValues();
+  // 削除
+  for(var i=0;i<expItemCnt;i++){
+    if(expItemList[i][0]==expItem){      
+      for(var j=i+1;j<expItemCnt;j++){
+        sht.getRange(5+j,2).setValue(expItemList[j][0]);
+      }
+      sht.getRange(5+expItemCnt,2).setValue("");
+      return 0;
+    }
+  }
+  return -5;
+}
+
+
+//---------------------------------------------
+
+function testDEE(){
+  var id="ita";
+  const sht = openShtByName(id);
+  var token = sht.getRange("D1").getValue(); 
+  Logger.log(delExpItem(id,token,"＊＊費"));
+}
+function testADE(){
+  var id="ita";
+  const sht = openShtByName(id);
+  var token = sht.getRange("D1").getValue(); 
+  Logger.log(addExpItem(id,token,"＊＊費"));
+}
 function testLRCD(){
   var id="ita";
   const sht = openShtByName(id);
@@ -289,3 +346,4 @@ function test01(a){
 // -2 : 不正な日付入力
 // -3 : 参照不一致
 // -4 : 参照範囲外
+// -5 : 存在しない費目入力

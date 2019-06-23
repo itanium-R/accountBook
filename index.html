@@ -73,6 +73,7 @@
       <input type="text" id="newRcdMemo"><br>
       <input type="button" value="記入" onclick="sendNewRecord()">
     </section>
+    
     <section id="viewRecordSec">
       <input type="button" class="monthShiftButton" value="前月" onclick="shiftMonthForView(-1)">
       <span id="viewYear"  class="bigFont">2019</span>年
@@ -80,8 +81,18 @@
       <input type="button" class="monthShiftButton" value="次月" onclick="shiftMonthForView(1)">
       <div id="monthRecord"></div>
     </section>
+    
     <section id="settingSec">
-      <br>loading...<br><hr>set
+      <div id="addExpItemDiv">
+        <font class="bigFont">費目追加</font><br>
+        <input type="text" id="addExpItem"><br>
+        <input type="button" value="追加" onclick="addExpItem()">
+      </div>
+      <div id="delExpItemDiv">
+        <font class="bigFont">費目削除</font><br>
+        <div id="delExpItemSelect"></div>
+        <input type="button" value="削除" onclick="delExpItem()">
+      </div>
     </section>
       
       

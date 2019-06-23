@@ -118,6 +118,7 @@
         loadExpItemSelect("expItemDiv","rcdExpItem");
       }
       function initializeSetting(){
+        loadExpItemSelect("delExpItemSelect","delExpItem");
       }
       
       // --------------------------------------
@@ -252,7 +253,7 @@
             authFailure();
             return -1;
           }
-          if(result==0){ // 成功時
+          if(result===0){ // 成功時
             //showRichAlert("更新成功！");
           }else{
             showRichAlert("更新失敗...　もう一度実行してください．");
@@ -278,7 +279,7 @@
             authFailure();
             return -1;
           }
-          if(result==0){ // 成功時
+          if(result===0){ // 成功時
             //showRichAlert("削除成功！");
           }else{
             showRichAlert("削除失敗...　もう一度実行してください．");
@@ -307,6 +308,51 @@
         loadMonthRecordTable();
       }
       
+      
+      // --------------------------------------
+      // 設定用　費目設定  
+            
+      function addExpItem(){
+        let expItem = getElemValById("addExpItem");
+        showLoading();
+        google.script.run.withSuccessHandler(addOk)
+                         .withFailureHandler(gasFailure)
+                         .addExpItem(USERINFO.id,USERINFO.token,expItem);
+        function addOk(result){
+          if(result==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
+          if(result===0){ // 成功時
+            showRichAlert("費目追加成功！");
+            loadExpItemSelect("delExpItemSelect","delExpItem");
+            resetElemValById("addExpItem");
+          }else{
+            showRichAlert("費目追加失敗...　もう一度実行してください．");
+          }
+          hideLoading();
+        }
+      }
+      
+      function delExpItem(){
+        let expItem = getElemValById("delExpItem");showLoading();
+        google.script.run.withSuccessHandler(deleteOk)
+                         .withFailureHandler(gasFailure)
+                         .delExpItem(USERINFO.id,USERINFO.token,expItem);
+        function deleteOk(result){
+          if(result==-1){ //認証失敗
+            authFailure();
+            return -1;
+          }
+          if(result===0){ // 成功時
+            showRichAlert("削除成功！");
+            loadExpItemSelect("delExpItemSelect","delExpItem");
+          }else{
+            showRichAlert("削除失敗...　もう一度実行してください．");
+          }
+          hideLoading();
+        }
+      }
       // --------------------------------------
       // JS　utilities  
             

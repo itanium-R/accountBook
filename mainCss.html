@@ -42,6 +42,10 @@
         
         border-radius:5px;
       }
+      .headButton:hover{
+        background-color:#AAA;
+        transition: all 0.3s ease-out;
+      }
       .menuButton{
         width:6em;
         display:inline-block;
@@ -100,7 +104,14 @@
         border-radius: 0.5em;
       }
       input[type="button"]:active{
+        background-color:#DDD;
       }      
+      
+      input[type="button"]:hover{
+        background-color:#AAA;
+        transition: all 0.3s ease-out;
+      }
+        
       input[type="button"]:disabled{
         background : #999;
       }      
@@ -224,6 +235,7 @@
       }
       table tr.BG-FFF:hover{
         background-color:#DDD;
+        transition: all 0.3s ease-out;
       }
       table tr.BG-FFF:active{
         background-color:#DDD;
@@ -233,5 +245,24 @@
       
       table tr.BG-FFF{background-color:#FFF;}
       table tr.BG-EEE{background-color:#EEE;}
+      
+      #addExpItemDiv,#delExpItemDiv{
+        border-radius: 0.5em;
+        height:3em;
+        overflow:hidden;
+        background-color:#EEE;
+        transition: all 0.3s ease-out;
+        margin: 0.5em auto 0.5em auto;
+      }
+      #addExpItemDiv:hover ,#delExpItemDiv:hover{
+        height:12em;
+        transition: all 0.3s ease-out;
+        background-color:#FFF;
+      }
+      #addExpItemDiv:active ,#delExpItemDiv:active{
+        height:12em;
+        transition: all 0.3s ease-out;
+        background-color:#FFF;
+      }
       
     --></style>
