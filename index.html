@@ -66,11 +66,11 @@
       <label>費目</label>
       <span id="newExpItemDiv"></span><br>
       <label>概要</label>
-      <input type="text" id="newRcdDescription"><br>
+      <input type="text" id="newRcdDescription" onblur="removeForbiddenWord(this)"><br>
       <label>金額</label>
       <input type="text" id="newRcdPayment" onblur="parseHankakuNum(this)"><br>
       <label>メモ</label>
-      <input type="text" id="newRcdMemo"><br>
+      <input type="text" id="newRcdMemo" onblur="removeForbiddenWord(this)"><br>
       <input type="button" value="記入" onclick="sendNewRecord()">
     </section>
     
@@ -85,7 +85,7 @@
     <section id="settingSec">
       <div id="addExpItemDiv">
         <font class="bigFont">費目追加</font><br>
-        <input type="text" id="addExpItem"><br>
+        <input type="text" id="addExpItem" onblur="removeForbiddenWord(this)"><br>
         <input type="button" value="追加" onclick="addExpItem()">
       </div>
       <div id="delExpItemDiv">
@@ -109,9 +109,9 @@
       <div id="recordAlertText">
       <label>日付</label><input type="date" id="rcdDate"><br>
       <label>費目</label><span id="expItemDiv"></span><br>
-      <label>概要</label><input type="text" id="rcdDescription"><br>
+      <label>概要</label><input type="text" id="rcdDescription" onblur="removeForbiddenWord(this)"><br>
       <label>金額</label><input type="text" id="rcdPayment" onblur="parseHankakuNum(this)"><br>
-      <label>メモ</label><input type="text" id="rcdMemo"><br>
+      <label>メモ</label><input type="text" id="rcdMemo" onblur="removeForbiddenWord(this)"><br>
       </div>
       <input type="button" class="dangerButton miniButton" value="削除" onclick="deleteRecord()">
       <input type="button" class="miniButton" value="書換"  onclick="rewriteRecord()">

@@ -1,5 +1,5 @@
 <script type="text/javascript"><!--
-//TODO : inputから",',<,>の入力を無効化
+
       var RCDINFO  = RCDINFO  || {};
       var USERINFO = USERINFO || {};
       
@@ -380,6 +380,11 @@
         });
         hanNum = hanNum.replace(/[^0-9]/g, (s) => {return "";});
         elem.value=hanNum;
+      }
+      
+      function removeForbiddenWord(elem){
+        let result = elem.value.replace(/"|'|<|>/g, (s) => {return "";});
+        elem.value=result;
       }
       
       function resetElemValById(id)    {return document.getElementById(id).value="";}  
