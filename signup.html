@@ -30,6 +30,9 @@
         if(pass!=pass2){
           alert("passwordが一致しません");
           return -1;
+        }if(String(pass).length<4){
+          alert("passwordが短すぎます．4文字以上にしてください");
+          return -1;
         }
         pass = sha256(pass);
         
@@ -41,7 +44,7 @@
           if(result===0){
             hideElemById("signup");
             showElemById("done","block");
-          }else if(result==-10){
+          }else if(result==-10||result==-11){
             alert("そのIDは利用できません．");
           }else{
             alert("アカウント登録失敗");
@@ -73,6 +76,7 @@
         onKeyDown="if(event.keyCode==13){signup();}" 
         onFocus="this.select(0,this.value.length)" onblur=""
         placeholder="" wrap="off" ><br>
+      Passは4文字以上にしてください．<br>
       <input type="button" value="Signup" onclick="signup()"  class="wideMargin">
       </form>
     </section>
@@ -86,7 +90,11 @@
     <section id="loader">
     <div class="loaderInner">Loading...</div>
     </section>
-  
+    <section id="richAlert"><div id="richAlertInner">
+      <div id="richAlertText">Alert</div>
+      <input type="button" value="閉じる" onclick="hideRichAlert()" id="richAlertClose"><br>
+    </div></section>
+    
   </body>
 </html>
 
