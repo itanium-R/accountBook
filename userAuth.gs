@@ -1,14 +1,14 @@
 // ユーザ認証byToken
-// @param id   {str} ID
+// @param id    {str} ID
 // @param token {str} token
-// @return     認証成功:true　失敗:false
+// @return      認証成功:true　失敗:false
 function userAuthByToken(id,token){
   if(id=="tmpl")return false; // tmplははじく
   // 存在するユーザか＝ユーザ用シートがあるか確認
   if(!isShtExist(id))return false;
   var usersSht  = openShtByName(id);
   
-  // pass一致
+  // token一致
   if(token==usersSht.getRange("D1").getValue()){
     return true;
   }
