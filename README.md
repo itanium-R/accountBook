@@ -4,9 +4,9 @@
 cloud account book app on GAS
 
 ## How To install
-https://docs.google.com/spreadsheets/d/1M6VhmA732r4IFGc45hizBycybbsXevVSGbXj8NFE3j4/edit?usp=sharing
+https://docs.google.com/spreadsheets/d/12KePaX3y3TljIgfOxkCwptLrL0u3tGsXbPAepI6VGNc/edit?usp=sharing
 
-[(2019/6/22更新 コミット85a453f版)](https://github.com/itanium-R/accountBook/tree/85a453fe76df863bab5d6bb3eb47a43c81bf9ccf)
+[(2019/6/24更新 コミット4544609版)](https://github.com/itanium-R/accountBook/tree/4544609360bfb9cf982e511492d74e1218ae3da1)
 
 上記のシートをコピーし，
 ~~~
