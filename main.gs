@@ -96,7 +96,10 @@ function loadTable(recordList,startIndex,endIndex){
   var outHtmlTable = "<table>";
   var day ="";
   startIndex = startIndex || 0;
-  endIndex   = endIndex   || recordList.length-1;
+  if (endIndex === undefined) {
+    endIndex = recordList.length-1;
+  }
+  if(endIndex<startIndex)return "データはありません";
   
   //outHtmlTable には "<table><tr><td></td><td></td><td></td><td></td></tr></table>"のように格納
   for(var i=startIndex;i<=endIndex;i++){
