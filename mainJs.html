@@ -32,9 +32,13 @@
         hideElemById("navi");
         hideElemById("logoutButton");
         switchSec("loginSec");
-        document.getElementById("userId").value = document.cookie.split("userId=")[1].split(";")[0];
+        try{
+          buildLinkInThisApp("linkToSignup","signup","アカウント登録はこちらから");
+          document.getElementById("userId").value = document.cookie.split("userId=")[1].split(";")[0];
+        }catch(e){
+          console.log(e);
+        }
         
-        buildLinkInThisApp("linkToSignup","signup","アカウント登録はこちらから");
       }
       
       function gasFailure(){
